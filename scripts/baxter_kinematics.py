@@ -28,7 +28,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import rospy
-
+import numpy as np
+import PyKDL
 from baxter_pykdl import baxter_kinematics
 
 
@@ -49,7 +50,8 @@ def main():
     # kin.forward_velocity_kinematics()
     # IK
     print '\n*** Baxter Position IK ***\n'
-    pos = [0.582583, -0.180819, 0.216003]
+    #pos = np.matrix('0.582583; -0.180819; 0.216003')
+    pos = [0.2, -0.8, 0.0]
     rot = [0.03085, 0.9945, 0.0561, 0.0829]
     print kin.inverse_kinematics(pos)  # position, don't care orientation
     print '\n*** Baxter Pose IK ***\n'

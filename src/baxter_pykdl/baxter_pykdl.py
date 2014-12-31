@@ -121,7 +121,10 @@ class baxter_kinematics(object):
 
     def inverse_kinematics(self, position, orientation=None, seed=None):
         ik = PyKDL.ChainIkSolverVel_pinv(self._arm_chain)
-        pos = PyKDL.Vector(position[0], position[1], position[2])
+        pos = PyKDL.Vector()
+        pos.x(position[0])
+        pos.y(position[1])
+        pos.z(position[2])
         if orientation != None:
             rot = PyKDL.Rotation()
             rot = rot.Quaternion(orientation[0], orientation[1],
@@ -143,7 +146,9 @@ class baxter_kinematics(object):
         result_angles = PyKDL.JntArray(self._num_jnts)
 
         if self._ik_p_kdl.CartToJnt(seed_array, goal_pose, result_angles) >= 0:
-            result = np.array(result_angles)
+            
+            result = result_angles
+
             return result
         else:
             print 'No IK Solution Found'

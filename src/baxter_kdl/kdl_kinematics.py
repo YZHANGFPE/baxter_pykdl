@@ -206,6 +206,7 @@ class KDLKinematics(object):
         rot_kdl = kdl.Rotation(rot[0,0], rot[0,1], rot[0,2],
                                rot[1,0], rot[1,1], rot[1,2],
                                rot[2,0], rot[2,1], rot[2,2])
+        
         frame_kdl = kdl.Frame(rot_kdl, pos_kdl)
         if min_joints is None:
             min_joints = self.joint_safety_lower
