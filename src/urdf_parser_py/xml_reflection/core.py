@@ -413,6 +413,7 @@ class Reflection(object):
 				info.children.remove(child)
 		
 		for attribute in map(self.attribute_map.get, unset_attributes):
+			print attribute
 			attribute.set_default()
 			
 		for element in map(self.element_map.get, unset_scalars):

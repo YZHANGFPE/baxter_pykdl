@@ -447,6 +447,7 @@ class Robot(xmlr.Object):
 		"""
 		# Could move this into xml_reflection
 		import rospy
+		print rospy.get_param(key)
 		return cls.from_xml_string(rospy.get_param(key))
 	
 xmlr.reflect(Robot, tag = 'robot', params = [
