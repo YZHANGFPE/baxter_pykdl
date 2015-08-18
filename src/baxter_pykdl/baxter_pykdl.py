@@ -42,9 +42,9 @@ class baxter_kinematics(object):
     Baxter Kinematics with PyKDL
     """
     def __init__(self, limb):
-        #self._baxter = URDF.from_parameter_server(key='robot_description')
-        file_path = "/home/umdbaxter/ros_ws/src/baxter_common/baxter_description/urdf/baxter.urdf"
-        self._baxter = URDF.from_xml_file(file_path)
+        self._baxter = URDF.from_parameter_server(key='robot_description')
+        #file_path = "/home/umdbaxter/ros_ws/src/baxter_common/baxter_description/urdf/baxter.urdf"
+        #self._baxter = URDF.from_xml_file(file_path)
         self._kdl_tree = kdl_tree_from_urdf_model(self._baxter)
         self._base_link = self._baxter.get_root()
         self._tip_link = limb + '_gripper'
@@ -98,6 +98,17 @@ class baxter_kinematics(object):
             kdl_array = PyKDL.JntArrayVel(kdl_array)
         return kdl_array
 
+    def joint_points_to_kdl(self, point_list):
+        kdl_array = PyKDL.JntArray(self._num_jnts)
+
+        
+        cur_type_values = point_list
+        
+        for idx, name in enumerate(self._joint_names):
+            kdl_array[idx] = cur_type_values[idx]
+
+        return kdl_array
+
     def kdl_to_mat(self, data):
         mat =  np.mat(np.zeros((data.rows(), data.columns())))
         for i in range(data.rows()):
@@ -105,9 +116,13 @@ class baxter_kinematics(object):
                 mat[i,j] = data[i,j]
         return mat
 
-    def forward_position_kinematics(self):
+    def forward_position_kinematics(self, point_list = None):
         end_frame = PyKDL.Frame()
-        self._fk_p_kdl.JntToCart(self.joints_to_kdl('positions'),
+        if point_list == None:
+            self._fk_p_kdl.JntToCart(self.joints_to_kdl('positions'),
+                                 end_frame)
+        else:
+            self._fk_p_kdl.JntToCart(self.joint_points_to_kdl(point_list),
                                  end_frame)
         pos = end_frame.p
         rot = PyKDL.Rotation(end_frame.M)
