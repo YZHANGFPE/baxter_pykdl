@@ -149,7 +149,7 @@ class Texture(xmlr.Object):
 		self.filename = filename
 
 xmlr.reflect(Texture, params = [
-	xmlr.Attribute('filename', str, required=False)
+	xmlr.Attribute('filename', str)
 	])
 
 
@@ -203,13 +203,6 @@ class Inertia(xmlr.Object):
 xmlr.reflect(Inertia, params = [xmlr.Attribute(key, float) for key in Inertia.KEYS])
 
 
-class Gravity(xmlr.Object):
-	def __init__(self):
-            pass
-
-xmlr.reflect(Gravity, params = [
-	])
-
 class Inertial(xmlr.Object):
 	def __init__(self, mass = 0.0, inertia = None, origin=None):
 		self.mass = mass
@@ -244,8 +237,8 @@ class JointLimit(xmlr.Object):
 
 xmlr.reflect(JointLimit, params = [
 	xmlr.Attribute('effort', float),
-	xmlr.Attribute('lower', float),
-	xmlr.Attribute('upper', float),
+	xmlr.Attribute('lower', float, False, 0),
+	xmlr.Attribute('upper', float, False, 0),
 	xmlr.Attribute('velocity', float)
 	])
 
@@ -271,9 +264,9 @@ class SafetyController(xmlr.Object):
 
 xmlr.reflect(SafetyController, params = [
 	xmlr.Attribute('k_velocity', float),
-	xmlr.Attribute('k_position', float),
-	xmlr.Attribute('soft_lower_limit', float),
-	xmlr.Attribute('soft_upper_limit', float)
+	xmlr.Attribute('k_position', float, False, 0),
+	xmlr.Attribute('soft_lower_limit', float, False, 0),
+	xmlr.Attribute('soft_upper_limit', float, False, 0)
 	])
 
 class Joint(xmlr.Object):
@@ -320,21 +313,19 @@ xmlr.reflect(Joint, params = [
 
 
 class Link(xmlr.Object):
-	def __init__(self, name=None, visual=None, inertial=None, collision=None, origin = None, gravity = None):
+	def __init__(self, name=None, visual=None, inertial=None, collision=None, origin = None):
 		self.name = name
 		self.visual = visual
 		self.inertial = inertial
 		self.collision = collision
 		self.origin = origin
-                self.gravity = gravity
 
 xmlr.reflect(Link, params = [
 	name_attribute,
 	origin_element,
 	xmlr.Element('inertial', Inertial, False),
 	xmlr.Element('visual', Visual, False),
-	xmlr.Element('collision', Collision, False),
-	xmlr.Element('gravity', Gravity, False)
+	xmlr.Element('collision', Collision, False)
 	])
 
 

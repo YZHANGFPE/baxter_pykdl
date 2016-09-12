@@ -31,6 +31,7 @@ import numpy as np
 import PyKDL
 
 import rospy
+import rospkg
 
 import baxter_interface
 
@@ -42,7 +43,10 @@ class baxter_kinematics(object):
     Baxter Kinematics with PyKDL
     """
     def __init__(self, limb):
-        self._baxter = URDF.from_parameter_server(key='robot_description')
+        # self._baxter = URDF.from_parameter_server(key='robot_description')
+        path = rospkg.RosPack().get_path('baxter_pykdl')
+        print path
+        self._baxter = URDF.from_xml_file(path + '/scripts/robot_description.urdf')
         self._kdl_tree = kdl_tree_from_urdf_model(self._baxter)
         self._base_link = self._baxter.get_root()
         self._tip_link = limb + '_gripper'
